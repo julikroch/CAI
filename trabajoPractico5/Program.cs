@@ -82,7 +82,7 @@ namespace trabajoPractico5
                     Console.WriteLine("Ingrese número de registro");
                     correcto = int.TryParse(Console.ReadLine(), out registro);
                     if (correcto == false) {
-                        Console.WriteLine("Ingrese un Número");
+                        Console.WriteLine("Ingrese un número entero");
                     }
                     else {
                         if (registro > 888000 & registro < 999999) {
@@ -96,7 +96,7 @@ namespace trabajoPractico5
                     string[] vector = p.Split(';');
 
                     if (registro == Convert.ToInt32(vector[0])) {
-                        Console.WriteLine("Bienvenido " + vector[1]);
+                        Console.WriteLine("Alumno: " + vector[1] + " " +vector[2]);
                         return vector[0];
                     }
                 }
@@ -105,11 +105,11 @@ namespace trabajoPractico5
         }
 
         public static string VerificarMateria() {
-            string Path = "MateriasxAlumno.csv";
+            string Path = "materiasxAlumno.csv";
             FileInfo FI = new FileInfo(Path);
 
             if (!FI.Exists) {
-                Console.WriteLine("No existe el archivo");
+                Console.WriteLine("No existe el archivo de materias por alumno");
                 return "error";
             }
             else {
@@ -117,6 +117,7 @@ namespace trabajoPractico5
                 int materia = 0;
                 bool materiaOk = false;
                 bool correcto = false;
+
                 while (!materiaOk) {
                     Console.WriteLine("Ingrese código de materia");
                     correcto = int.TryParse(Console.ReadLine(), out materia);
@@ -145,7 +146,7 @@ namespace trabajoPractico5
         }
 
         public static string VerificarCurso() {
-            string Path = "CursosxAlumno.csv";
+            string Path = "cursosxAlumno.csv";
             FileInfo FI = new FileInfo(Path);
 
             if (!FI.Exists) {
