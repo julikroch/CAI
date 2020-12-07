@@ -15,11 +15,9 @@ namespace trabajoPractico5
             int opcionSeleccionada;
             Console.WriteLine($"Bienvenido al sistema de la Facultad de Ciencias Economicas de la UBA.\n 1. Iniciar el proceso de registración de la solicitud de inscripción a materias seleccionadas\n 2. Consultar posibles materias y curso a seleccionar\n 3. Finalizar \n\n Ingrese su opcion");
 
-            do
-            {
+            do {
                 opcionSeleccionada = Convert.ToInt32(Console.ReadLine());
-                switch (opcionSeleccionada)
-                {
+                switch (opcionSeleccionada) {
                     case 1:
                         solicitudInscripcion();
                         break;
@@ -152,39 +150,33 @@ namespace trabajoPractico5
                 int registroMin = 000000;
                 int registroMax = 999999;
 
-                bool registroIngresado = false;
                 bool registroValido = false;
                 bool alumnoEncontrado = false;
 
                 do {
-                    Console.WriteLine("Ingrese su número de registro");
+                    Console.WriteLine("Ingrese un número de registro");
 
                     registroValido = int.TryParse(Console.ReadLine(), out registro);
                     if (!registroValido) {
-                        Console.WriteLine("Ingrese un número entero");
+                        Console.WriteLine("El numero ingresado no es entero");
                     }
-                    else {
-                        if (registro > registroMin & registro < registroMax) {
-                            registroIngresado = true;
-                        }
-                        else Console.WriteLine($"Número de registro incorrecto. Por favor ingrese un numero de registro entre {registroMin} y {registroMax}");
+                    else if (registro < registroMin || registro > registroMax) {
+                        Console.WriteLine($"Número de registro incorrecto. Por favor ingrese un numero de registro entre {registroMin} y {registroMax}");
+                        registroValido = false;
                     }
-                } while (!registroIngresado && !registroValido);
+                } while (!registroValido);
 
                 do {
                     string p = sr.ReadLine();
                     string[] arr = p.Split(';');
 
-                    if (registro == Convert.ToInt32(arr[0]))
-                    {
+                    if (registro == Convert.ToInt32(arr[0])) {
                         alumnoEncontrado = true;
                         Console.WriteLine($"Alumno: {arr[1]} {arr[2]} \n");
-                        if (arr[3] == "Libre")
-                        {
+                        if (arr[3] == "Libre") {
                             Console.WriteLine("El alumno no se encuentra en regularidad para cursar, por favor revise su numero de registro \n");
                         }
-                        else
-                        {
+                        else {
                             mensaje = arr[0];
                         }
                     }
@@ -209,16 +201,14 @@ namespace trabajoPractico5
             else {
                 StreamReader sr = FI.OpenText();
                 int materia = 0;
-                bool materiaOk = false;
                 bool correcto = false;
               
-                while (!materiaOk) {
+                while (!correcto) {
                     Console.WriteLine("Ingrese código de materia");
                     correcto = int.TryParse(Console.ReadLine(), out materia);
                     if (correcto == false) {
-                        Console.WriteLine("Ingrese un número entero");
+                        Console.WriteLine("El numero de materia no es valido");
                     }
-                    materiaOk = true;
                 }
 
                 while (!sr.EndOfStream) {
@@ -244,6 +234,7 @@ namespace trabajoPractico5
             string Path = "cursosxAlumno.csv";
             string mensaje = "";
             bool cursoEncontrado = false;
+
             FileInfo FI = new FileInfo(Path);
 
             if (!FI.Exists) {
@@ -253,15 +244,13 @@ namespace trabajoPractico5
             else {
                 StreamReader sr = FI.OpenText();
                 int curso = 0;
-                bool cursoOk = false;
                 bool correcto = false;
-                while (!cursoOk) {
+                while (!correcto) {
                     Console.WriteLine("Ingrese código de curso");
                     correcto = int.TryParse(Console.ReadLine(), out curso);
                     if (correcto == false) {
-                        Console.WriteLine("Ingrese un Número");
+                        Console.WriteLine("El codigo ingresado no corresponde a un numero entero");
                     }
-                    cursoOk = true;
                 }
 
                 while (!sr.EndOfStream) {
