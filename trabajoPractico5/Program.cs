@@ -47,8 +47,7 @@ namespace trabajoPractico5
             if (numeroRegistro == "Error") {
                 exhibirMenu();
             }
-            else
-            {
+            else {
                 string materia1 = "";
                 string curso1 = "";
                 string materia2 = "";
@@ -59,16 +58,14 @@ namespace trabajoPractico5
                 List<string> solicitudTotal = new List<string>();
 
                 materia1 = verificarMateria();
-                while (materia1 == "Error")
-                {
+                while (materia1 == "Error") {
                     Console.WriteLine("La materia ingresada no es correcta\n");
                     materia1 = verificarMateria();
                 }
 
                 curso1 = verificarCurso();
 
-                while (curso1 == "Error")
-                {
+                while (curso1 == "Error") {
                     Console.WriteLine("El curso ingresado no es correcto\n");
                     curso1 = verificarCurso();
                 }
@@ -77,26 +74,22 @@ namespace trabajoPractico5
 
                 Console.WriteLine("¿Desea incribirse a más materias? En caso afirmativo, ingrse 'S', sino, presione cualquier tecla para finalizar\n");
 
-                if (Console.ReadLine().ToLower() == "s")
-                {
+                if (Console.ReadLine().ToLower() == "s") {
                     materia2 = verificarMateria();
 
-                    while (materia1 == materia2)
-                    {
+                    while (materia1 == materia2) {
                         Console.WriteLine("Ya está inscripto a la materia seleccionada\n");
                         materia2 = verificarMateria();
                     }
 
-                    while (materia2 == "Error")
-                    {
+                    while (materia2 == "Error") {
                         Console.WriteLine("La materia ingresada no es correcta\n");
                         materia2 = verificarMateria();
                     }
 
                     curso2 = verificarCurso();
 
-                    while (curso2 == "Error")
-                    {
+                    while (curso2 == "Error") {
                         Console.WriteLine("El curso ingresado no es correcto\n");
                         curso2 = verificarCurso();
                     }
@@ -105,25 +98,21 @@ namespace trabajoPractico5
 
                     Console.WriteLine("¿Desea incribirse a más materias? En caso afirmativo, ingrse 'S', sino, presione cualquier tecla para finalizar\n");
 
-                    if (Console.ReadLine().ToLower() == "s")
-                    {
+                    if (Console.ReadLine().ToLower() == "s") {
                         materia3 = verificarMateria();
-                        while (materia1 == materia3 || materia2 == materia3)
-                        {
+                        while (materia1 == materia3 || materia2 == materia3) {
                             Console.WriteLine("Ya está inscripto a la materia seleccionada\n");
                             materia3 = verificarMateria();
                         }                       
 
-                        while (materia3 == "Error")
-                        {
+                        while (materia3 == "Error") {
                             Console.WriteLine("La materia ingresada no es correcta\n");
                             materia3 = verificarMateria();
                         }
 
                         curso3 = verificarCurso();
 
-                        while (curso3 == "Error")
-                        {
+                        while (curso3 == "Error") {
                             Console.WriteLine("El curso ingresado no es correcto\n");
                             curso3 = verificarCurso();
                         }
@@ -136,15 +125,13 @@ namespace trabajoPractico5
                 FileStream stream = null;
                 stream = new FileStream(Path, FileMode.OpenOrCreate);
 
-                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-                {
+                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8)) {
                     writer.WriteLine("Numero de registro; Codigo de materia; Codigo de Curso;");
-                    foreach (var item in solicitudTotal)
-                    {
+                    foreach (var item in solicitudTotal) {
                         writer.WriteLine(item);
                     }
                   
-                    Console.WriteLine("Su solicitud fue registrada exitosamente. Se ha generado un archivo con el detalle de la misma.\n");
+                    Console.WriteLine("Su solicitud fue registrada exitosamente. Se ha generado un archivo con el detalle de la misma. Presione cualquier tecla para finalizar la instrcipción\n");
                     Console.ReadKey();
                 }
             }
@@ -245,8 +232,7 @@ namespace trabajoPractico5
                     }
                 }
 
-                if (materiaEncontrada == false)
-                {
+                if (materiaEncontrada == false) {
                     Console.WriteLine("El numero de materia ingresado no se encuentra presente en el archivo. Por favor ingrese otro numero de materia \n");
                     mensaje = "Error";
                 }
@@ -288,20 +274,13 @@ namespace trabajoPractico5
                         return vector[0];
                     }
                 }
-                if (cursoEncontrado == false)
-                {
+                if (cursoEncontrado == false) {
                     Console.WriteLine("El numero de curso ingresado no se encuentra presente en el archivo. Por favor ingrese otro numero de curso \n");
                     mensaje = "Error";
                 }
                 return mensaje;
             }
         }
-
-        /****************************************
-
-            Opcion 2 del menu
-         
-         ****************************************/
 
         public static string verOferta() {
             string Path = "ofertaCalificada.csv";
