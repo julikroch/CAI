@@ -8,7 +8,7 @@ namespace trabajoPractico5
     class Program
     {
         static void Main(string[] args) {
-            exhibirMenu();
+            exhibirMenu(); // Exhibicion del menu de opciones al comienzo de la aplicacion 
         }
 
         public static void exhibirMenu(){
@@ -19,17 +19,17 @@ namespace trabajoPractico5
                 opcionSeleccionada = Convert.ToInt32(Console.ReadLine());
                 switch (opcionSeleccionada) {
                     case 1:
-                        solicitudInscripcion();
+                        solicitudInscripcion(); // Llamado al metodo de solicitud de inscripcion a materias
                         break;
                     case 2:
-                        verOferta();
+                        verOferta(); // Mostrar oferta calificada
                         Console.WriteLine("Ingrese la letra V para volver al menu \n");
                         if(Console.ReadLine().ToLower() == "v") {
                             exhibirMenu();
                         }
                         break;
                     case 3:
-                        Console.WriteLine("Ingrese cualquier caracter para finalizar\n");
+                        Console.WriteLine("Ingrese cualquier tecla para finalizar\n"); // Cierro la aplicacion
                         Console.ReadKey();
                         break;
                     default:
@@ -40,7 +40,8 @@ namespace trabajoPractico5
         }
 
         public static void solicitudInscripcion() {
-            string numeroRegistro = verificarRegistro();
+
+            string numeroRegistro = verificarRegistro(); // Metodo para verificar que el registro pertenezca al maestro de alumnos
 
             if (numeroRegistro == "Error") {
                 exhibirMenu();
@@ -53,7 +54,7 @@ namespace trabajoPractico5
                 string materia3 = "";
                 string curso3 = "";
 
-                List<string> solicitudTotal = new List<string>();
+                List<string> solicitudTotal = new List<string>(); // Array de materias y cursos para cada registro
 
                 materia1 = verificarMateria();
                 while (materia1 == "Error") {
@@ -62,20 +63,19 @@ namespace trabajoPractico5
                 }
 
                 curso1 = verificarCurso();
-
                 while (curso1 == "Error") {
                     Console.WriteLine("El curso ingresado no es correcto\n");
                     curso1 = verificarCurso();
                 }
 
-                solicitudTotal.Add($"{numeroRegistro};{materia1};{curso1}");
+                solicitudTotal.Add($"{numeroRegistro};{materia1};{curso1}"); // Se agrega al array la inscripcion de la primer materia y curso
 
-                Console.WriteLine("¿Desea incribirse a más materias? En caso afirmativo, ingrse 'S', sino, presione cualquier tecla para finalizar\n");
+                Console.WriteLine("¿Desea incribirse a más materias? En caso afirmativo, ingrese la tecla 'S', sino, presione cualquier tecla para finalizar\n");
 
                 if (Console.ReadLine().ToLower() == "s") {
-                    materia2 = verificarMateria();
 
-                    while (materia1 == materia2) {
+                    materia2 = verificarMateria();
+                    while (materia1 == materia2) { // Validacion para evitar que se seleccione una materia que ya se haya seleccionado anteriormente
                         Console.WriteLine("Ya está inscripto a la materia seleccionada\n");
                         materia2 = verificarMateria();
                     }
@@ -86,40 +86,40 @@ namespace trabajoPractico5
                     }
 
                     curso2 = verificarCurso();
-
                     while (curso2 == "Error") {
                         Console.WriteLine("El curso ingresado no es correcto\n");
                         curso2 = verificarCurso();
                     }
 
-                    solicitudTotal.Add($"{numeroRegistro};{materia2};{curso2}");
+                    solicitudTotal.Add($"{numeroRegistro};{materia2};{curso2}"); // Se agrega al array la inscripcion de la segunda materia y curso
 
                     Console.WriteLine("¿Desea incribirse a más materias? En caso afirmativo, ingrse 'S', sino, presione cualquier tecla para finalizar\n");
 
                     if (Console.ReadLine().ToLower() == "s") {
+
                         materia3 = verificarMateria();
-                        while (materia1 == materia3 || materia2 == materia3) {
-                            Console.WriteLine("Ya está inscripto a la materia seleccionada\n");
+                        while (materia1 == materia3 || materia2 == materia3) { // Validacion para evitar que se seleccione una materia que ya se haya seleccionado anteriormente
+                            Console.WriteLine("Ya está inscripto a la materia seleccionada\n"); 
                             materia3 = verificarMateria();
                         }                       
 
                         while (materia3 == "Error") {
-                            Console.WriteLine("La materia ingresada no es correcta\n");
+                            Console.WriteLine("La materia ingresada no es correcta\n"); 
                             materia3 = verificarMateria();
                         }
 
                         curso3 = verificarCurso();
-
                         while (curso3 == "Error") {
                             Console.WriteLine("El curso ingresado no es correcto\n");
                             curso3 = verificarCurso();
                         }
 
-                        solicitudTotal.Add($"{numeroRegistro};{materia3};{curso3}");
+                        solicitudTotal.Add($"{numeroRegistro};{materia3};{curso3}"); // Se agrega al array la inscripcion de la tercer materia y curso
                     }
                 }
 
-                string Path = "SolicitudInscripción " + numeroRegistro + ".csv";
+                // Generacion del archivo CSV con el numero de registro, materias y cursos seleccionados por el alumno
+                string Path = "SolicitudInscripción-" + numeroRegistro + ".csv";
                 FileStream stream = null;
                 stream = new FileStream(Path, FileMode.OpenOrCreate);
 
@@ -140,7 +140,7 @@ namespace trabajoPractico5
             FileInfo fileInfo = new FileInfo(Path);
             string mensaje = "Error";
 
-            if (!fileInfo.Exists) {
+            if (!fileInfo.Exists) { // Verificacion de la existencia del archivo 
                 Console.WriteLine("Debe existir el maestro de alumnos.");
                 return mensaje;
             }
@@ -170,7 +170,7 @@ namespace trabajoPractico5
                     string p = sr.ReadLine();
                     string[] arr = p.Split(';');
 
-                    if (registro == Convert.ToInt32(arr[0])) {
+                    if (registro == Convert.ToInt32(arr[0])) { // Recorro el array para encontrar al alumno ingresado y valido que su condicion no sea 'Libre'
                         alumnoEncontrado = true;
                         Console.WriteLine($"Alumno: {arr[1]} {arr[2]} \n");
                         if (arr[3] == "Libre") {
@@ -188,25 +188,25 @@ namespace trabajoPractico5
             return mensaje;
         }
 
-        public static string verificarMateria() {
+        public static string verificarMateria() { 
             string Path = "materiasxAlumno.csv";
             string mensaje = "";
             bool materiaEncontrada = false;
             FileInfo FI = new FileInfo(Path);
 
-            if (!FI.Exists) {
+            if (!FI.Exists) { // Verificacion de la existencia del archivo 
                 Console.WriteLine("No existe el archivo de materias por alumno");
                 return "error";
             }
             else {
                 StreamReader sr = FI.OpenText();
                 int materia = 0;
-                bool correcto = false;
+                bool codigoMateria = false;
               
-                while (!correcto) {
+                while (!codigoMateria) {
                     Console.WriteLine("Ingrese código de materia");
-                    correcto = int.TryParse(Console.ReadLine(), out materia);
-                    if (correcto == false) {
+                    codigoMateria = int.TryParse(Console.ReadLine(), out materia);
+                    if (codigoMateria == false) {
                         Console.WriteLine("El numero de materia no es valido");
                     }
                 }
@@ -215,7 +215,7 @@ namespace trabajoPractico5
                     string p = sr.ReadLine();
                     string[] vector = p.Split(';');
 
-                    if (materia == Convert.ToInt32(vector[0])) {
+                    if (materia == Convert.ToInt32(vector[0])) { // Recorro el array de materias para verificar que exista la materia ingresada
                         Console.WriteLine($"Materia: {vector[1]} \nCorrelativas: {vector[2]} \n");
                         materiaEncontrada = true;
                         return vector[0];
@@ -244,11 +244,11 @@ namespace trabajoPractico5
             else {
                 StreamReader sr = FI.OpenText();
                 int curso = 0;
-                bool correcto = false;
-                while (!correcto) {
+                bool codigoCurso = false;
+                while (!codigoCurso) {
                     Console.WriteLine("Ingrese código de curso");
-                    correcto = int.TryParse(Console.ReadLine(), out curso);
-                    if (correcto == false) {
+                    codigoCurso = int.TryParse(Console.ReadLine(), out curso);
+                    if (codigoCurso == false) {
                         Console.WriteLine("El codigo ingresado no corresponde a un numero entero");
                     }
                 }
@@ -257,7 +257,7 @@ namespace trabajoPractico5
                     string p = sr.ReadLine();
                     string[] vector = p.Split(';');
 
-                    if (curso == Convert.ToInt32(vector[0])) {
+                    if (curso == Convert.ToInt32(vector[0])) { // Recorro el array de los cursos para verificar que se haya encontrado el curso ingresado
                         Console.WriteLine("Titular: " + vector[1]);
                         cursoEncontrado = true;
                         return vector[0];
@@ -271,7 +271,7 @@ namespace trabajoPractico5
             }
         }
 
-        public static string verOferta() {
+        public static string verOferta() { // Metodo para mostrar la oferta calificada del cuatrimestre entrante
             string Path = "ofertaCalificada.csv";
             FileInfo FI = new FileInfo(Path);
             string mensaje = "";
