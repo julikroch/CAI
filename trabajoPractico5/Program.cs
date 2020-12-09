@@ -76,7 +76,7 @@ namespace trabajoPractico5
 
                     materia2 = verificarMateria();
                     while (materia1 == materia2) { // Validacion para evitar que se seleccione una materia que ya se haya seleccionado anteriormente
-                        Console.WriteLine("Ya está inscripto a la materia seleccionada\n");
+                        Console.WriteLine("Ya ha solicitado la inscripcion a la materia ingresada. Por favor, seleccione un nuevo numero de materia\n");
                         materia2 = verificarMateria();
                     }
 
@@ -99,7 +99,7 @@ namespace trabajoPractico5
 
                         materia3 = verificarMateria();
                         while (materia1 == materia3 || materia2 == materia3) { // Validacion para evitar que se seleccione una materia que ya se haya seleccionado anteriormente
-                            Console.WriteLine("Ya está inscripto a la materia seleccionada\n"); 
+                            Console.WriteLine("Ya ha solicitado la inscripcion a la materia ingresada. Por favor, seleccione un nuevo numero de materia\n"); 
                             materia3 = verificarMateria();
                         }                       
 
@@ -119,7 +119,7 @@ namespace trabajoPractico5
                 }
 
                 // Generacion del archivo CSV con el numero de registro, materias y cursos seleccionados por el alumno
-                string Path = "SolicitudInscripción-" + numeroRegistro + ".csv";
+                string Path = "solicitudInscripción-" + numeroRegistro + ".csv";
                 FileStream stream = null;
                 stream = new FileStream(Path, FileMode.OpenOrCreate);
 
@@ -129,7 +129,7 @@ namespace trabajoPractico5
                         writer.WriteLine(item);
                     }
                   
-                    Console.WriteLine("Su solicitud fue registrada exitosamente. Se ha generado un archivo con el detalle de la misma. Presione cualquier tecla para finalizar la instrcipción\n");
+                    Console.WriteLine("Su solicitud fue registrada exitosamente. Se ha generado un archivo con el detalle de la misma. Presione cualquier tecla para finalizar la inscripción\n");
                     Console.ReadKey();
                 }
             }
@@ -141,7 +141,7 @@ namespace trabajoPractico5
             string mensaje = "Error";
 
             if (!fileInfo.Exists) { // Verificacion de la existencia del archivo 
-                Console.WriteLine("Debe existir el maestro de alumnos.");
+                Console.WriteLine("Debe existir el archivo maestro de alumnos.");
                 return mensaje;
             }
             else {
@@ -158,7 +158,7 @@ namespace trabajoPractico5
 
                     registroValido = int.TryParse(Console.ReadLine(), out registro);
                     if (!registroValido) {
-                        Console.WriteLine("El numero ingresado no es entero");
+                        Console.WriteLine("El numero ingresado no es entero. Por favor, revise su ingreso");
                     }
                     else if (registro < registroMin || registro > registroMax) {
                         Console.WriteLine($"Número de registro incorrecto. Por favor ingrese un numero de registro entre {registroMin} y {registroMax}");
@@ -174,7 +174,7 @@ namespace trabajoPractico5
                         alumnoEncontrado = true;
                         Console.WriteLine($"Alumno: {arr[1]} {arr[2]} \n");
                         if (arr[3] == "Libre") {
-                            Console.WriteLine("El alumno no se encuentra en regularidad para cursar, por favor revise su numero de registro \n");
+                            Console.WriteLine("El registro ingresado no se encuentra en regularidad para cursar, por favor revise su numero de registro \n");
                         }
                         else {
                             mensaje = arr[0];
@@ -182,7 +182,7 @@ namespace trabajoPractico5
                     }
                 } while (!sr.EndOfStream);
                 if (!alumnoEncontrado) {
-                    Console.WriteLine("El alumno no figura en el maestro de alumnos");
+                    Console.WriteLine("El registro ingresado no figura en el maestro de alumnos");
                 }
             }
             return mensaje;
@@ -207,7 +207,7 @@ namespace trabajoPractico5
                     Console.WriteLine("Ingrese código de materia");
                     codigoMateria = int.TryParse(Console.ReadLine(), out materia);
                     if (codigoMateria == false) {
-                        Console.WriteLine("El numero de materia no es valido");
+                        Console.WriteLine("El numero de materia no es valido. Por favor, revise su ingreso");
                     }
                 }
 
@@ -238,7 +238,7 @@ namespace trabajoPractico5
             FileInfo FI = new FileInfo(Path);
 
             if (!FI.Exists) {
-                Console.WriteLine("No existe el archivo");
+                Console.WriteLine("No existe el archivo de cursos asociados a las materias");
                 return "error";
             }
             else {
@@ -282,7 +282,7 @@ namespace trabajoPractico5
             }
             else {
                 StreamReader sr = FI.OpenText();
-                Console.WriteLine("\nA continuacion se muestra la oferta calificada para el cuatrimestre entrante \n");
+                Console.WriteLine("\nA continuacion se muestra la oferta calificada para el cuatrimestre entrante: \n");
 
                 while (!sr.EndOfStream) {
                     string p = sr.ReadLine();
