@@ -47,7 +47,7 @@ namespace trabajoPractico5
         public static void solicitudInscripcion()
         {
 
-            string numeroRegistro = verificarRegistro(); // Metodo para verificar que el registro pertenezca al maestro de alumnos
+            string numeroRegistro = verificarRegistro(out string[] materiasAprobadas); // Metodo para verificar que el registro pertenezca al maestro de alumnos
             const string cuatrimestre = "2do 2020";
 
             if (numeroRegistro == "Error")
@@ -65,11 +65,10 @@ namespace trabajoPractico5
 
                 List<string> solicitudTotal = new List<string>(); // Array de materias y cursos para cada registro
 
-                materia1 = verificarMateria();
+                materia1 = verificarMateria(materiasAprobadas);
                 while (materia1 == "Error")
                 {
-                    Console.WriteLine("La materia ingresada no es correcta\n");
-                    materia1 = verificarMateria();
+                    materia1 = verificarMateria(materiasAprobadas);
                 }
 
                 curso1 = verificarCurso(materia1);
@@ -85,17 +84,16 @@ namespace trabajoPractico5
                 if (Console.ReadLine().ToLower() == "s")
                 {
 
-                    materia2 = verificarMateria();
+                    materia2 = verificarMateria(materiasAprobadas);
                     while (materia1 == materia2)
                     { // Validacion para evitar que se seleccione una materia que ya se haya seleccionado anteriormente
                         Console.WriteLine("Ya ha solicitado la inscripcion a la materia ingresada. Por favor, seleccione un nuevo numero de materia\n");
-                        materia2 = verificarMateria();
+                        materia2 = verificarMateria(materiasAprobadas);
                     }
 
                     while (materia2 == "Error")
                     {
-                        Console.WriteLine("La materia ingresada no es correcta\n");
-                        materia2 = verificarMateria();
+                        materia2 = verificarMateria(materiasAprobadas);
                     }
 
                     curso2 = verificarCurso(materia2);
@@ -110,17 +108,16 @@ namespace trabajoPractico5
 
                     if (Console.ReadLine().ToLower() == "s")
                     {
-                        materia3 = verificarMateria();
+                        materia3 = verificarMateria(materiasAprobadas);
                         while (materia1 == materia3 || materia2 == materia3)
                         { // Validacion para evitar que se seleccione una materia que ya se haya seleccionado anteriormente
                             Console.WriteLine("Ya ha solicitado la inscripcion a la materia ingresada. Por favor, seleccione un nuevo numero de materia\n");
-                            materia3 = verificarMateria();
+                            materia3 = verificarMateria(materiasAprobadas);
                         }
 
                         while (materia3 == "Error")
                         {
-                            Console.WriteLine("La materia ingresada no es correcta\n");
-                            materia3 = verificarMateria();
+                            materia3 = verificarMateria(materiasAprobadas);
                         }
 
                         curso3 = verificarCurso(materia3);
@@ -149,22 +146,6 @@ namespace trabajoPractico5
                     Console.ReadKey();
                 }
 
-                /*string Path2 = "inscripcionesAnteriores.csv";
-                FileStream stream2 = null;
-                stream2 = new FileStream(Path2, FileMode.Append);
-
-                using (StreamWriter writer2 = new StreamWriter(stream2, Encoding.UTF8))
-                {
-                    //writer2.WriteLine("Test; Test; Test; Test;");
-                    foreach (var item in solicitudTotal)
-                    {
-                        writer2.WriteLine(item);
-                    }
-
-                    Console.WriteLine("Presione algo para finalizar\n");
-                    Console.ReadKey();
-                }*/
-
                 //Archivo de inscripciones generales
                 string pathInscripcion = "inscripcionesCuatrimestre.csv";
                 FileStream streamInscripcion = null;
@@ -180,7 +161,7 @@ namespace trabajoPractico5
             }
         }
 
-        public static string verificarRegistro()
+        public static string verificarRegistro(out string[] materiasAprobadas)
         {
             string Path = "alumnos.csv";
             FileInfo fileInfo = new FileInfo(Path);
@@ -190,78 +171,83 @@ namespace trabajoPractico5
 
             string pathInscripcion = "inscripcionesCuatrimestre.csv";
             FileInfo fileInfoInscripcion = new FileInfo(pathInscripcion);
-            StreamReader srInscripcion = fileInfoInscripcion.OpenText();
-
-            int registro = 0;
-            int registroMin = 000000;
-            int registroMax = 999999;
-
-            bool registroValido = false;
-            bool alumnoEncontrado = false;
-
-            bool alumnoInscripto = false;
-            int registroAlumno = 0;
-            int registroInscripcion = 0;
-
-            do
+            using (StreamReader srInscripcion = fileInfoInscripcion.OpenText())
             {
-                Console.WriteLine("Ingrese un número de registro");
-                registroValido = int.TryParse(Console.ReadLine(), out registro);
+                int registro = 0;
+                int registroMin = 000000;
+                int registroMax = 999999;
 
-                if (!registroValido)
+                bool registroValido = false;
+                bool alumnoEncontrado = false;
+
+                bool alumnoInscripto = false;
+                int registroAlumno = 0;
+                int registroInscripcion = 0;
+
+                materiasAprobadas = null;
+
+                do
                 {
-                    Console.WriteLine("El numero ingresado no es entero. Por favor, revise su ingreso");
-                }
-                else if (registro < registroMin || registro > registroMax)
-                {
-                    Console.WriteLine($"Número de registro incorrecto. Por favor ingrese un numero de registro entre {registroMin} y {registroMax}");
-                    registroValido = false;
-                }
-            } while (!registroValido);
+                    Console.WriteLine("Ingrese un número de registro");
+                    registroValido = int.TryParse(Console.ReadLine(), out registro);
 
-            do
-            {
-                string p = sr.ReadLine();
-                string[] arr = p.Split(';');
-
-                int.TryParse(arr[0], out registroAlumno);
-
-                if (registro == registroAlumno)
-                { // Verifico si el registro ingresado corresponde con el de un alumno en la lista de alumnos
-                    alumnoEncontrado = true;
-                    do
+                    if (!registroValido)
                     {
-                        string pInscripcion = srInscripcion.ReadLine();
-                        string[] arrInscripcion = pInscripcion.Split(';');
-                        int.TryParse(arrInscripcion[1], out registroInscripcion);
+                        Console.WriteLine("El numero ingresado no es entero. Por favor, revise su ingreso");
+                    }
+                    else if (registro < registroMin || registro > registroMax)
+                    {
+                        Console.WriteLine($"Número de registro incorrecto. Por favor ingrese un numero de registro entre {registroMin} y {registroMax}");
+                        registroValido = false;
+                    }
+                } while (!registroValido);
 
-                        if (registro == registroInscripcion)
-                        { // Verifico que el alumno no haya realizado una inscripicion previa
-                            Console.WriteLine("El registro ingresado ya ha realizado una inscripcion previamente \n");
-                            return mensaje;
+                do
+                {
+                    string p = sr.ReadLine();
+                    string[] arr = p.Split(';');
+
+                    registroAlumno = int.Parse(arr[0]);
+
+                    if (registro == registroAlumno)
+                    { // Verifico si el registro ingresado corresponde con el de un alumno en la lista de alumnos
+                        alumnoEncontrado = true;
+                        do
+                        {
+                            string pInscripcion = srInscripcion.ReadLine();
+                            string[] arrInscripcion = pInscripcion.Split(';');
+                            registroInscripcion = int.Parse(arrInscripcion[1]);
+
+                            if (registro == registroInscripcion)
+                            { // Verifico que el alumno no haya realizado una inscripicion previa
+                                Console.WriteLine("El registro ingresado ya ha realizado una inscripcion previamente \n");
+                                materiasAprobadas = null;
+                                return mensaje;
+                            }
+                        } while (!srInscripcion.EndOfStream);
+
+                        Console.WriteLine($"Alumno: {arr[1]} {arr[2]} \n");
+
+                        if (arr[3] == "Libre")
+                        {
+                            Console.WriteLine("El registro ingresado no se encuentra en regularidad para cursar, por favor revise su numero de registro \n");
                         }
-                    } while (!srInscripcion.EndOfStream);
-
-                    Console.WriteLine($"Alumno: {arr[1]} {arr[2]} \n");
-
-                    if (arr[3] == "Libre")
-                    {
-                        Console.WriteLine("El registro ingresado no se encuentra en regularidad para cursar, por favor revise su numero de registro \n");
+                        else
+                        {
+                            materiasAprobadas = arr[4].Split(',');
+                            mensaje = arr[0];
+                        }
                     }
-                    else
-                    {
-                        mensaje = arr[0];
-                    }
+                } while (!sr.EndOfStream);
+                if (!alumnoEncontrado)
+                {
+                    Console.WriteLine("No hay un alumno registrado con ese número de registro");
                 }
-            } while (!sr.EndOfStream);
-            if (!alumnoEncontrado)
-            {
-                Console.WriteLine("No hay un alumno registrado con ese número de registro");
+                return mensaje;
             }
-            return mensaje;
         }
 
-        public static string verificarMateria()
+        public static string verificarMateria(string[] materiasAprobadas)
         {
             string Path = "materias.csv";
             string mensaje = "";
@@ -272,11 +258,13 @@ namespace trabajoPractico5
             int materia = 0;
             bool codigoMateria = false;
 
+            string[] materiasCorrelativas;
+
             while (!codigoMateria)
             {
                 Console.WriteLine("Ingrese código de materia");
                 codigoMateria = int.TryParse(Console.ReadLine(), out materia);
-                if (codigoMateria == false)
+                if (!codigoMateria)
                 {
                     Console.WriteLine("El numero de materia ingresado no es valido. Por favor, revise su ingreso");
                 }
@@ -289,14 +277,24 @@ namespace trabajoPractico5
 
                 if (materia == Convert.ToInt32(vector[0]))
                 { // Recorro el array de materias para verificar que exista la materia ingresada
-
                     Console.WriteLine($"Materia: {vector[1]} \nCorrelativas: {vector[2]} \n");
+                    materiasCorrelativas = vector[3].Split(',');
+
+                    foreach (var item in materiasCorrelativas)
+                    {
+                        if (Array.IndexOf(materiasAprobadas, item) == -1 && item != "")
+                        {
+                            Console.WriteLine("No tiene las correlativas aprobadas para cursar esta materia");
+                            return "Error";
+                        }
+                    }
+
                     materiaEncontrada = true;
                     return vector[0];
                 }
             }
 
-            if (materiaEncontrada == false)
+            if (!materiaEncontrada)
             {
                 Console.WriteLine("No se ha encontrado materia registrada con dicho codigo. Por favor ingrese otro numero de materia \n");
                 mensaje = "Error";
@@ -341,7 +339,7 @@ namespace trabajoPractico5
                 }
             }
 
-            if (cursoEncontrado == false)
+            if (!cursoEncontrado)
             {
                 Console.WriteLine("El numero de curso ingresado no está disponible para la materia a la que se desea inscribir. Por favor ingrese otro numero de curso \n");
                 mensaje = "Error";
